@@ -3,14 +3,14 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const Result = () => {
+const Result = (props) => {
   const router = useRouter();
   const { keyword, limit } = router.query;
   const [videoList, setVideoList] = useState([]);
 
-  const api = `https://www.googleapis.com/youtube/v3/search?key=AIzaSyDHBHN2yOF9Nq6pR527rdsF4ic_oppeZHY&part=snippet&type=video${
-    limit && `&maxResults=${limit}`
-  }`;
+  const api = `https://www.googleapis.com/youtube/v3/search?key=${
+    props.YOUTUBE_API
+  }&part=snippet&type=video${limit && `&maxResults=${limit}`}`;
 
   useEffect(() => {
     (async () => {
@@ -51,5 +51,13 @@ const Result = () => {
     </>
   );
 };
+
+export async function getStaticProps() {
+  return {
+    props: {
+      YOUTUBE_API: process.env.YOUTUBE_API,
+    },
+  };
+}
 
 export default Result;
